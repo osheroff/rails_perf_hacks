@@ -10,6 +10,8 @@ Gem::Specification.new do |s|
     "ext/**",
   ]
   s.require_paths = ["ext", "lib"]
+  s.extensions << 'ext/extconf.rb'
+
   s.summary = %q{yup}
 
   s.add_runtime_dependency("activesupport", "~> 2.3.14")
