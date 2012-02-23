@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = %q{rails_perf_hacks}
-  s.version = "0.0.2"
+  s.version = "0.0.3"
 
   s.authors = ["Ben Osheroff"]
   s.date = %q{2011-10-28}
