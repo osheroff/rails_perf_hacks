@@ -64,9 +64,35 @@ VALUE multibyte_clean(VALUE self, VALUE string)
 
       p += 4;
     } else {
-      p++;
-      continue;
-    }
+      int skip = 0;
+      switch (*p) { 
+        case 0xC0:
+        case 0xC1:
+          skip = 2;
+          break;
+        case 0xF5:
+        case 0xF6:
+        case 0xF7:
+          skip = 4;
+          break;
+        case 0xF8:
+        case 0xF9:
+        case 0xFA:
+        case 0xFB:
+          skip = 5;
+          break;
+        case 0xFC:
+        case 0xFD:
+          skip = 6;
+          break;
+        default: 
+          skip = 1;
+      }
+      if ( OVERRUN(string, p, skip) ) 
+        break;
+
+      p += skip;
+    }  
   }
 
   RSTRING_LEN(new_str) = (new - (unsigned char *)RSTRING_PTR(new_str));

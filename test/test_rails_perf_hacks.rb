@@ -49,10 +49,22 @@ class TestRailsPerfHacks <  ActiveSupport::TestCase
 
     test "a bit of fuzz shouldn't crash us" do
       with_encoding("UTF8") do
-        10_000.times do
-          ActiveSupport::Multibyte.clean(5.times.map { rand(255) }.pack("C*"))
+        100_000.times do
+          str = 10.times.map { rand(255) }.pack("C*")
+          compare_original(str)
+          #ActiveSupport::Multibyte.clean(10.times.map { rand(255) }.pack("C*"))
         end
       end
+    end
+
+    test "against the original method" do
+      compare_original("\x4C\x6F\x6F\x70\x73\x95\x20\x34\x30\x20\x53\x6F\x6C\x6F\x20\x56\x69\x6F\x6C\x61")
+      compare_original("\xF2hello world")
+      compare_original("☃ and me")
+      compare_original("\xf3\xb0\x80\x8b coming back")
+      compare_original("crash me \xf3")
+      compare_original("crash me \xe0")
+      compare_original("crash me \xe0")
     end
   else
     test "clean is a no-op" do
@@ -121,6 +133,24 @@ class TestRailsPerfHacks <  ActiveSupport::TestCase
 
   def assert_equal_codepoints(expected, actual, message=nil)
     assert_equal(inspect_codepoints(expected), inspect_codepoints(actual), message)
+  end
+
+  def hexstr(str)
+    str.unpack("C*").map { |c| "\\x%x" % c }.join
+  end
+
+  def compare_original(input)
+
+    if ActiveSupport::Multibyte.clean_slow(input) != ActiveSupport::Multibyte.clean(input)
+      original = hexstr(input)
+      split = input.split(//).map { |s| hexstr(s) }.join(" ")
+      puts original
+      puts split
+      puts "OURS: " + hexstr(ActiveSupport::Multibyte.clean(input))
+      puts "!!!!: " + hexstr(ActiveSupport::Multibyte.clean_slow(input))
+      assert false
+      assert_equal ActiveSupport::Multibyte.clean_slow(input), ActiveSupport::Multibyte.clean(input)
+    end
   end
 end
 

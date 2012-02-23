@@ -4,11 +4,10 @@ Gem::Specification.new do |s|
 
   s.authors = ["Ben Osheroff"]
   s.date = %q{2011-10-28}
-  s.description = %q{}
+  s.description = %q{"Some C extensions to make rails 2 faster"}
   s.email = ["ben@gimbo.net"]
-  s.files = [
-    "ext/**",
-  ]
+  s.files = Dir.glob("lib/**/*") + Dir.glob("ext/**/*")
+
   s.require_paths = ["ext", "lib"]
   s.extensions << 'ext/extconf.rb'
 
