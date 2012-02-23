@@ -1,0 +1,16 @@
+PATH
+  remote: .
+  specs:
+    rails_perf_hacks (0.0.1)
+      activesupport (~> 2.3.14)
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    activesupport (2.3.14)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  rails_perf_hacks!
