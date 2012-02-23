@@ -1,7 +1,7 @@
 require 'mkmf'
 require 'rbconfig'
 
-$CFLAGS="-g"
+$CFLAGS="-g -O3"
 if CONFIG['CC'] =~ /gcc/
   $CFLAGS << ' -Wall'
 end
